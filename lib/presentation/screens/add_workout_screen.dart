@@ -278,41 +278,60 @@ class _AddWorkoutScreenState extends ConsumerState<AddWorkoutScreen> {
                 ),
               )
             else
-              ..._exercises.asMap().entries.map((entry) {
-                final index = entry.key;
-                final exercise = entry.value;
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      child: Text('${index + 1}'),
+              ReorderableListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _exercises.length,
+                onReorder: (oldIndex, newIndex) {
+                  setState(() {
+                    if (newIndex > oldIndex) {
+                      newIndex--;
+                    }
+                    final exercise = _exercises.removeAt(oldIndex);
+                    _exercises.insert(newIndex, exercise);
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final exercise = _exercises[index];
+                  return Card(
+                    key: ValueKey(exercise.id),
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        child: Text('${index + 1}'),
+                      ),
+                      title: Text(
+                        exercise.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        '${exercise.sets} sets × ${exercise.reps} reps @ ${exercise.weight} kg\n'
+                        'Volume: ${exercise.volume.toStringAsFixed(1)} kg',
+                      ),
+                      isThreeLine: true,
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.drag_handle,
+                            color: Colors.grey[600],
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () => _editExercise(index),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () => _removeExercise(index),
+                            color: Colors.red,
+                          ),
+                        ],
+                      ),
                     ),
-                    title: Text(
-                      exercise.name,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      '${exercise.sets} sets × ${exercise.reps} reps @ ${exercise.weight} kg\n'
-                      'Volume: ${exercise.volume.toStringAsFixed(1)} kg',
-                    ),
-                    isThreeLine: true,
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () => _editExercise(index),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () => _removeExercise(index),
-                          color: Colors.red,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
+                  );
+                },
+              ),
           ],
         ),
       ),

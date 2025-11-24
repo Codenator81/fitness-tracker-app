@@ -1,4 +1,5 @@
 import '../../domain/entities/workout.dart';
+import '../../domain/exceptions/workout_exceptions.dart';
 import '../../domain/repositories/workout_repository.dart';
 import '../datasources/workout_local_datasource.dart';
 import '../models/workout_model.dart';
@@ -28,7 +29,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       await dataSource.saveWorkout(workoutModel);
     } catch (e) {
       // Step 4: Handle errors
-      throw RepositoryException('Failed to save workout: $e');
+      throw WorkoutStorageException('Failed to save workout: $e');
     }
   }
 
@@ -42,7 +43,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       return workoutModel?.toEntity();
     } catch (e) {
       // Step 4: Handle errors
-      throw RepositoryException('Failed to get workout by ID: $e');
+      throw WorkoutStorageException('Failed to get workout by ID: $e');
     }
   }
 
@@ -56,7 +57,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       return workoutModels.map((model) => model.toEntity()).toList();
     } catch (e) {
       // Step 4: Handle errors
-      throw RepositoryException('Failed to get all workouts: $e');
+      throw WorkoutStorageException('Failed to get all workouts: $e');
     }
   }
 
@@ -67,7 +68,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       await dataSource.deleteWorkout(id);
     } catch (e) {
       // Step 4: Handle errors
-      throw RepositoryException('Failed to delete workout: $e');
+      throw WorkoutStorageException('Failed to delete workout: $e');
     }
   }
 
@@ -81,17 +82,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       await dataSource.updateWorkout(workoutModel);
     } catch (e) {
       // Step 4: Handle errors
-      throw RepositoryException('Failed to update workout: $e');
+      throw WorkoutStorageException('Failed to update workout: $e');
     }
   }
-}
-
-/// Exception thrown when a repository operation fails
-class RepositoryException implements Exception {
-  final String message;
-
-  RepositoryException(this.message);
-
-  @override
-  String toString() => 'RepositoryException: $message';
 }

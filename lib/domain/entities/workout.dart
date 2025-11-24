@@ -48,6 +48,11 @@ class Workout {
   }
 
   /// Create a copy of this workout with modified fields
+  ///
+  /// To explicitly set nullable fields to null, use the clear* parameters:
+  /// - clearName: true to set name to null
+  /// - clearDuration: true to set duration to null
+  /// - clearNotes: true to set notes to null
   Workout copyWith({
     String? id,
     String? name,
@@ -55,14 +60,17 @@ class Workout {
     List<Exercise>? exercises,
     Duration? duration,
     String? notes,
+    bool clearName = false,
+    bool clearDuration = false,
+    bool clearNotes = false,
   }) {
     return Workout(
       id: id ?? this.id,
-      name: name ?? this.name,
+      name: clearName ? null : (name ?? this.name),
       date: date ?? this.date,
       exercises: exercises ?? this.exercises,
-      duration: duration ?? this.duration,
-      notes: notes ?? this.notes,
+      duration: clearDuration ? null : (duration ?? this.duration),
+      notes: clearNotes ? null : (notes ?? this.notes),
     );
   }
 

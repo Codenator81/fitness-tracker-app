@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import '../providers/workout_providers.dart';
+import '../widgets/workout_card.dart';
 import 'add_workout_screen.dart';
 import 'workout_detail_screen.dart';
 
@@ -98,58 +98,63 @@ class HomeScreen extends ConsumerWidget {
               itemCount: workouts.length,
               itemBuilder: (context, index) {
                 final workout = workouts[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16),
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                      child: Icon(
-                        Icons.fitness_center,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                return WorkoutCard(
+                  workout: workout,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => WorkoutDetailScreen(workout: workout),
                       ),
-                    ),
-                    title: Text(
-                      workout.name ?? 'Workout',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                    ).then((_) {
+                      // Reload workouts when returning from detail screen
+                      ref.read(workoutListNotifierProvider.notifier).loadWorkouts();
+                    });
+                  },
+                  onDelete: () async {
+                    // Show confirmation dialog
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Delete Workout'),
+                        content: Text(
+                          'Are you sure you want to delete "${workout.name ?? 'this workout'}"?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text('Cancel'),
+                          ),
+                          FilledButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            style: FilledButton.styleFrom(
+                              backgroundColor: Colors.red,
+                            ),
+                            child: const Text('Delete'),
+                          ),
+                        ],
                       ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 4),
-                        Text(
-                          _formatDate(workout.date),
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${workout.exerciseCount} exercises • '
-                          '${workout.totalVolume.toStringAsFixed(0)} kg total volume',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => WorkoutDetailScreen(workout: workout),
-                        ),
-                      ).then((_) {
-                        // Reload workouts when returning from detail screen
+                    );
+
+                    if (confirmed == true && context.mounted) {
+                      try {
+                        final deleteUseCase = ref.read(deleteWorkoutUseCaseProvider);
+                        await deleteUseCase(workout.id);
                         ref.read(workoutListNotifierProvider.notifier).loadWorkouts();
-                      });
-                    },
-                  ),
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Workout deleted')),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error deleting workout: $e')),
+                          );
+                        }
+                      }
+                    }
+                  },
                 );
               },
             ),
@@ -172,9 +177,5 @@ class HomeScreen extends ConsumerWidget {
         label: const Text('Add Workout'),
       ),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    return DateFormat('EEEE, MMM d, yyyy').format(date);
   }
 }

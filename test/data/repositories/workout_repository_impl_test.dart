@@ -5,6 +5,7 @@ import 'package:fitness_tracker/data/datasources/workout_local_datasource.dart';
 import 'package:fitness_tracker/data/models/workout_model.dart';
 import 'package:fitness_tracker/domain/entities/workout.dart';
 import 'package:fitness_tracker/domain/entities/exercise.dart';
+import 'package:fitness_tracker/domain/exceptions/workout_exceptions.dart';
 
 // Mock classes
 class MockWorkoutLocalDataSource extends Mock implements WorkoutLocalDataSource {}
@@ -82,7 +83,7 @@ void main() {
         verify(() => mockDataSource.saveWorkout(any())).called(1);
       });
 
-      test('should throw RepositoryException when data source fails', () async {
+      test('should throw WorkoutStorageException when data source fails', () async {
         // Arrange
         when(() => mockDataSource.saveWorkout(any()))
             .thenThrow(DataSourceException('Database error'));
@@ -90,11 +91,11 @@ void main() {
         // Act & Assert
         expect(
           () => repository.saveWorkout(testWorkout),
-          throwsA(isA<RepositoryException>()),
+          throwsA(isA<WorkoutStorageException>()),
         );
       });
 
-      test('should include error message in RepositoryException', () async {
+      test('should include error message in WorkoutStorageException', () async {
         // Arrange
         when(() => mockDataSource.saveWorkout(any()))
             .thenThrow(DataSourceException('Disk full'));
@@ -103,7 +104,7 @@ void main() {
         expect(
           () => repository.saveWorkout(testWorkout),
           throwsA(
-            predicate<RepositoryException>(
+            predicate<WorkoutStorageException>(
               (e) => e.message.contains('Failed to save workout'),
             ),
           ),
@@ -118,7 +119,7 @@ void main() {
         // Act & Assert
         expect(
           () => repository.saveWorkout(testWorkout),
-          throwsA(isA<RepositoryException>()),
+          throwsA(isA<WorkoutStorageException>()),
         );
       });
     });
@@ -153,7 +154,7 @@ void main() {
         expect(result, isNull);
       });
 
-      test('should throw RepositoryException when data source fails', () async {
+      test('should throw WorkoutStorageException when data source fails', () async {
         // Arrange
         when(() => mockDataSource.getWorkout(any()))
             .thenThrow(DataSourceException('Database error'));
@@ -161,11 +162,11 @@ void main() {
         // Act & Assert
         expect(
           () => repository.getWorkoutById('1'),
-          throwsA(isA<RepositoryException>()),
+          throwsA(isA<WorkoutStorageException>()),
         );
       });
 
-      test('should include error message in RepositoryException', () async {
+      test('should include error message in WorkoutStorageException', () async {
         // Arrange
         when(() => mockDataSource.getWorkout(any()))
             .thenThrow(DataSourceException('Connection lost'));
@@ -174,7 +175,7 @@ void main() {
         expect(
           () => repository.getWorkoutById('1'),
           throwsA(
-            predicate<RepositoryException>(
+            predicate<WorkoutStorageException>(
               (e) => e.message.contains('Failed to get workout by ID'),
             ),
           ),
@@ -244,7 +245,7 @@ void main() {
         expect(result, isEmpty);
       });
 
-      test('should throw RepositoryException when data source fails', () async {
+      test('should throw WorkoutStorageException when data source fails', () async {
         // Arrange
         when(() => mockDataSource.getAllWorkouts())
             .thenThrow(DataSourceException('Database error'));
@@ -252,11 +253,11 @@ void main() {
         // Act & Assert
         expect(
           () => repository.getAllWorkouts(),
-          throwsA(isA<RepositoryException>()),
+          throwsA(isA<WorkoutStorageException>()),
         );
       });
 
-      test('should include error message in RepositoryException', () async {
+      test('should include error message in WorkoutStorageException', () async {
         // Arrange
         when(() => mockDataSource.getAllWorkouts())
             .thenThrow(DataSourceException('Read error'));
@@ -265,7 +266,7 @@ void main() {
         expect(
           () => repository.getAllWorkouts(),
           throwsA(
-            predicate<RepositoryException>(
+            predicate<WorkoutStorageException>(
               (e) => e.message.contains('Failed to get all workouts'),
             ),
           ),
@@ -339,7 +340,7 @@ void main() {
         verify(() => mockDataSource.deleteWorkout('999')).called(1);
       });
 
-      test('should throw RepositoryException when data source fails', () async {
+      test('should throw WorkoutStorageException when data source fails', () async {
         // Arrange
         when(() => mockDataSource.deleteWorkout(any()))
             .thenThrow(DataSourceException('Database error'));
@@ -347,11 +348,11 @@ void main() {
         // Act & Assert
         expect(
           () => repository.deleteWorkout('1'),
-          throwsA(isA<RepositoryException>()),
+          throwsA(isA<WorkoutStorageException>()),
         );
       });
 
-      test('should include error message in RepositoryException', () async {
+      test('should include error message in WorkoutStorageException', () async {
         // Arrange
         when(() => mockDataSource.deleteWorkout(any()))
             .thenThrow(DataSourceException('Delete failed'));
@@ -360,7 +361,7 @@ void main() {
         expect(
           () => repository.deleteWorkout('1'),
           throwsA(
-            predicate<RepositoryException>(
+            predicate<WorkoutStorageException>(
               (e) => e.message.contains('Failed to delete workout'),
             ),
           ),
@@ -417,7 +418,7 @@ void main() {
         verify(() => mockDataSource.updateWorkout(any())).called(1);
       });
 
-      test('should throw RepositoryException when data source fails', () async {
+      test('should throw WorkoutStorageException when data source fails', () async {
         // Arrange
         when(() => mockDataSource.updateWorkout(any()))
             .thenThrow(DataSourceException('Database error'));
@@ -425,11 +426,11 @@ void main() {
         // Act & Assert
         expect(
           () => repository.updateWorkout(testWorkout),
-          throwsA(isA<RepositoryException>()),
+          throwsA(isA<WorkoutStorageException>()),
         );
       });
 
-      test('should include error message in RepositoryException', () async {
+      test('should include error message in WorkoutStorageException', () async {
         // Arrange
         when(() => mockDataSource.updateWorkout(any()))
             .thenThrow(DataSourceException('Update failed'));
@@ -438,7 +439,7 @@ void main() {
         expect(
           () => repository.updateWorkout(testWorkout),
           throwsA(
-            predicate<RepositoryException>(
+            predicate<WorkoutStorageException>(
               (e) => e.message.contains('Failed to update workout'),
             ),
           ),
@@ -475,7 +476,7 @@ void main() {
     });
 
     group('error handling', () {
-      test('should wrap all DataSourceExceptions in RepositoryException', () async {
+      test('should wrap all DataSourceExceptions in WorkoutStorageException', () async {
         // Arrange
         when(() => mockDataSource.getAllWorkouts())
             .thenThrow(DataSourceException('Test error'));
@@ -483,11 +484,11 @@ void main() {
         // Act & Assert
         expect(
           () => repository.getAllWorkouts(),
-          throwsA(isA<RepositoryException>()),
+          throwsA(isA<WorkoutStorageException>()),
         );
       });
 
-      test('should wrap generic exceptions in RepositoryException', () async {
+      test('should wrap generic exceptions in WorkoutStorageException', () async {
         // Arrange
         when(() => mockDataSource.getAllWorkouts())
             .thenThrow(Exception('Unexpected error'));
@@ -495,19 +496,19 @@ void main() {
         // Act & Assert
         expect(
           () => repository.getAllWorkouts(),
-          throwsA(isA<RepositoryException>()),
+          throwsA(isA<WorkoutStorageException>()),
         );
       });
 
-      test('RepositoryException should have proper toString', () {
+      test('WorkoutStorageException should have proper toString', () {
         // Arrange
-        final exception = RepositoryException('Test error');
+        final exception = WorkoutStorageException('Test error');
 
         // Act
         final string = exception.toString();
 
         // Assert
-        expect(string, contains('RepositoryException'));
+        expect(string, contains('WorkoutStorageException'));
         expect(string, contains('Test error'));
       });
     });

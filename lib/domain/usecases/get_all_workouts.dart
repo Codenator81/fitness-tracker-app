@@ -20,8 +20,8 @@ class GetAllWorkouts {
     final workouts = await repository.getAllWorkouts();
 
     // Business logic: Sort by date, newest first
-    workouts.sort((a, b) => b.date.compareTo(a.date));
-
-    return workouts;
+    // Create new list to avoid mutating repository data
+    return List<Workout>.from(workouts)
+      ..sort((a, b) => b.date.compareTo(a.date));
   }
 }

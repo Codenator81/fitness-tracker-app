@@ -35,31 +35,31 @@ final workoutRepositoryProvider = Provider<WorkoutRepository>((ref) {
 
 /// Provider for GetAllWorkouts use case
 final getAllWorkoutsUseCaseProvider = Provider<GetAllWorkouts>((ref) {
-  final repository = ref.watch(workoutRepositoryProvider);
+  final repository = ref.read(workoutRepositoryProvider);
   return GetAllWorkouts(repository);
 });
 
 /// Provider for SaveWorkout use case
 final saveWorkoutUseCaseProvider = Provider<SaveWorkout>((ref) {
-  final repository = ref.watch(workoutRepositoryProvider);
+  final repository = ref.read(workoutRepositoryProvider);
   return SaveWorkout(repository);
 });
 
 /// Provider for GetWorkoutById use case
 final getWorkoutByIdUseCaseProvider = Provider<GetWorkoutById>((ref) {
-  final repository = ref.watch(workoutRepositoryProvider);
+  final repository = ref.read(workoutRepositoryProvider);
   return GetWorkoutById(repository);
 });
 
 /// Provider for DeleteWorkout use case
 final deleteWorkoutUseCaseProvider = Provider<DeleteWorkout>((ref) {
-  final repository = ref.watch(workoutRepositoryProvider);
+  final repository = ref.read(workoutRepositoryProvider);
   return DeleteWorkout(repository);
 });
 
 /// Provider for UpdateWorkout use case
 final updateWorkoutUseCaseProvider = Provider<UpdateWorkout>((ref) {
-  final repository = ref.watch(workoutRepositoryProvider);
+  final repository = ref.read(workoutRepositoryProvider);
   return UpdateWorkout(repository);
 });
 

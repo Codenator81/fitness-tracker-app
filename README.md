@@ -788,44 +788,6 @@ flutter run
 
 ---
 
-## GitHub Setup
-
-### Create Repository
-
-```bash
-# Initialize
-git init
-git add .
-git commit -m "Initial commit: Fitness tracker with Clean Architecture"
-
-# Create and push
-gh repo create fitness-tracker --public --source=. --push
-
-# Or private
-gh repo create fitness-tracker --private --source=. --push
-```
-
-### .gitignore
-
-```
-# Flutter
-.dart_tool/
-.packages
-build/
-.flutter-plugins
-
-# Hive
-*.hive
-*.lock
-
-# IDE
-.idea/
-.vscode/
-*.iml
-```
-
----
-
 ## Why Domain-First?
 
 ### Benefits

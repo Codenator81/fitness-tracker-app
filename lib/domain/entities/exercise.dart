@@ -23,6 +23,8 @@ class Exercise {
   double get volume => sets.toDouble() * reps.toDouble() * weight;
 
   /// Create a copy of this exercise with modified fields
+  ///
+  /// To explicitly set notes to null, use clearNotes: true
   Exercise copyWith({
     String? id,
     String? name,
@@ -30,6 +32,7 @@ class Exercise {
     int? reps,
     double? weight,
     String? notes,
+    bool clearNotes = false,
   }) {
     return Exercise(
       id: id ?? this.id,
@@ -37,7 +40,7 @@ class Exercise {
       sets: sets ?? this.sets,
       reps: reps ?? this.reps,
       weight: weight ?? this.weight,
-      notes: notes ?? this.notes,
+      notes: clearNotes ? null : (notes ?? this.notes),
     );
   }
 
