@@ -516,16 +516,6 @@ Each has:
 - Business logic (like sorting)
 ```
 
-### Test Domain Layer
-
-```bash
-flutter test test/domain/
-```
-
-**Domain should be fully testable without anything else!**
-
----
-
 ## Phase 4: Data Layer
 
 ### Step 1: Add Dependencies
