@@ -9,6 +9,7 @@ class Workout {
   final DateTime date;
   final List<Exercise> exercises;
   final Duration? duration;
+  final String? notes;
 
   const Workout({
     required this.id,
@@ -16,6 +17,7 @@ class Workout {
     required this.date,
     required this.exercises,
     this.duration,
+    this.notes,
   });
 
   /// Calculate total volume for entire workout (sum of all exercise volumes)
@@ -52,6 +54,7 @@ class Workout {
     DateTime? date,
     List<Exercise>? exercises,
     Duration? duration,
+    String? notes,
   }) {
     return Workout(
       id: id ?? this.id,
@@ -59,6 +62,7 @@ class Workout {
       date: date ?? this.date,
       exercises: exercises ?? this.exercises,
       duration: duration ?? this.duration,
+      notes: notes ?? this.notes,
     );
   }
 
@@ -74,6 +78,6 @@ class Workout {
 
   @override
   String toString() {
-    return 'Workout(id: $id, name: $name, date: $date, exerciseCount: $exerciseCount, totalVolume: ${totalVolume.toStringAsFixed(1)}, totalSets: $totalSets, duration: $duration)';
+    return 'Workout(id: $id, name: $name, date: $date, exerciseCount: $exerciseCount, totalVolume: ${totalVolume.toStringAsFixed(1)}, totalSets: $totalSets, duration: $duration, notes: $notes)';
   }
 }

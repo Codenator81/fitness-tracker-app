@@ -99,6 +99,7 @@ class _AddWorkoutScreenState extends ConsumerState<AddWorkoutScreen> {
         name: _nameController.text.isEmpty ? null : _nameController.text,
         date: _selectedDate,
         exercises: _exercises,
+        notes: _notesController.text.isEmpty ? null : _notesController.text,
       );
 
       final saveUseCase = ref.read(saveWorkoutUseCaseProvider);

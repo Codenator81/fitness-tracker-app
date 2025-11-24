@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'data/datasources/workout_local_datasource.dart';
+import 'presentation/providers/workout_providers.dart';
 import 'presentation/screens/home_screen.dart';
 
 /// Main entry point for the Fitness Tracker app
@@ -15,9 +16,13 @@ void main() async {
   await datasource.init();
 
   // Run app with Riverpod's ProviderScope
+  // Override the datasource provider with the initialized instance
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      overrides: [
+        workoutLocalDataSourceProvider.overrideWithValue(datasource),
+      ],
+      child: const MyApp(),
     ),
   );
 }

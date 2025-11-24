@@ -57,6 +57,13 @@ class _ExerciseInputState extends State<ExerciseInput> {
 
   @override
   void dispose() {
+    // Remove listeners before disposing controllers to prevent memory leaks
+    _nameController.removeListener(_notifyChange);
+    _setsController.removeListener(_notifyChange);
+    _repsController.removeListener(_notifyChange);
+    _weightController.removeListener(_notifyChange);
+    _notesController.removeListener(_notifyChange);
+
     _nameController.dispose();
     _setsController.dispose();
     _repsController.dispose();

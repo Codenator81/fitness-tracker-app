@@ -22,13 +22,14 @@ class WorkoutModelAdapter extends TypeAdapter<WorkoutModel> {
       date: fields[2] as DateTime,
       exercises: (fields[3] as List).cast<ExerciseModel>(),
       durationInSeconds: fields[4] as int?,
+      notes: fields[5] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, WorkoutModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class WorkoutModelAdapter extends TypeAdapter<WorkoutModel> {
       ..writeByte(3)
       ..write(obj.exercises)
       ..writeByte(4)
-      ..write(obj.durationInSeconds);
+      ..write(obj.durationInSeconds)
+      ..writeByte(5)
+      ..write(obj.notes);
   }
 
   @override

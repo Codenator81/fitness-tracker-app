@@ -19,7 +19,8 @@ class Exercise {
   });
 
   /// Calculate volume for this exercise (sets × reps × weight)
-  double get volume => sets * reps * weight;
+  /// Uses double multiplication to prevent integer overflow
+  double get volume => sets.toDouble() * reps.toDouble() * weight;
 
   /// Create a copy of this exercise with modified fields
   Exercise copyWith({

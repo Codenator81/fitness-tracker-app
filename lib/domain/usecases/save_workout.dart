@@ -1,4 +1,5 @@
 import '../entities/workout.dart';
+import '../exceptions/workout_exceptions.dart';
 import '../repositories/workout_repository.dart';
 
 /// Use Case: Save Workout
@@ -26,14 +27,4 @@ class SaveWorkout {
 
     await repository.saveWorkout(workout);
   }
-}
-
-/// Exception thrown when workout validation fails
-class WorkoutValidationException implements Exception {
-  final String message;
-
-  WorkoutValidationException(this.message);
-
-  @override
-  String toString() => 'WorkoutValidationException: $message';
 }

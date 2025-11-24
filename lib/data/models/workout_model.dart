@@ -26,12 +26,16 @@ class WorkoutModel extends HiveObject {
   @HiveField(4)
   final int? durationInSeconds;
 
+  @HiveField(5)
+  final String? notes;
+
   WorkoutModel({
     required this.id,
     this.name,
     required this.date,
     required this.exercises,
     this.durationInSeconds,
+    this.notes,
   });
 
   /// Convert from domain entity to data model
@@ -44,6 +48,7 @@ class WorkoutModel extends HiveObject {
           .map((exercise) => ExerciseModel.fromEntity(exercise))
           .toList(),
       durationInSeconds: workout.duration?.inSeconds,
+      notes: workout.notes,
     );
   }
 
@@ -57,6 +62,7 @@ class WorkoutModel extends HiveObject {
       duration: durationInSeconds != null
           ? Duration(seconds: durationInSeconds!)
           : null,
+      notes: notes,
     );
   }
 
@@ -68,6 +74,7 @@ class WorkoutModel extends HiveObject {
       'date': date.toIso8601String(),
       'exercises': exercises.map((e) => e.toJson()).toList(),
       'durationInSeconds': durationInSeconds,
+      'notes': notes,
     };
   }
 
@@ -81,6 +88,7 @@ class WorkoutModel extends HiveObject {
           .map((e) => ExerciseModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       durationInSeconds: json['durationInSeconds'] as int?,
+      notes: json['notes'] as String?,
     );
   }
 }
